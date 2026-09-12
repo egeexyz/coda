@@ -7,7 +7,7 @@ Item {
 
     Text {
         anchors.centerIn: parent
-        text: "Welcome to Hobby Linux"
+        text: "Welcome to Coda Linux"
         font.pointSize: 24
         color: "#333333"
     }

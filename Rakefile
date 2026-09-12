@@ -2,7 +2,7 @@
 
 ISO_DIR  = '.'
 VM_DIR   = 'vm'
-DISK_IMG = "#{VM_DIR}/hobbylinux-test.qcow2"
+DISK_IMG = "#{VM_DIR}/coda-test.qcow2"
 DISK_SIZE = '20G'
 VM_RAM   = '4G'
 VM_CPUS  = '2'
@@ -11,18 +11,17 @@ directory VM_DIR
 
 # ISO build task
 namespace :iso do
-  desc 'Build the HobbyLinux ISO via live-build in Docker'
+  desc 'Build the Coda Linux ISO via live-build in Docker'
   task :build do
     mkdir_p "#{ISO_DIR}/build"
 
     iso_dir = File.expand_path(ISO_DIR)
-    version = current_version
 
     sh 'docker pull debian:testing'
 
     sh <<~CMD
       docker run --rm --privileged \
-        --name hobbylinux-builder \
+        --name codaiso-builder \
         -e DEBIAN_FRONTEND=noninteractive \
         -v #{iso_dir}:/repo \
         debian:testing \
@@ -31,28 +30,26 @@ namespace :iso do
           cd /repo/build && \
           ln -snf ../auto auto && \
           ln -snf ../config config && \
-          lb config --image-name hobbylinux-#{version}-amd64 && \
+          lb config && \
           lb build 2>&1 | tee build.log && \
-          if [ -f live-image-amd64.hybrid.iso ]; then mv -f live-image-amd64.hybrid.iso hobbylinux-#{version}-amd64.iso; fi && \
-          if [ -f hobbylinux-#{version}-amd64.hybrid.iso ]; then mv -f hobbylinux-#{version}-amd64.hybrid.iso hobbylinux-#{version}-amd64.iso; fi && \
           chown -R #{Process.uid}:#{Process.gid} /repo/build"
     CMD
   end
 
   desc 'Clean ISO build artifacts'
   task :clean do
-    iso_dir = File.expand_path(ISO_DIR)
-    sh <<~CMD
-      docker run --rm --privileged \
-        --name hobbylinux-cleaner \
-        -v #{iso_dir}:/repo \
-        debian:testing \
-        bash -c "rm -rf /repo/build /repo/build.log /repo/*.iso"
-    CMD
     rm_rf "#{ISO_DIR}/build"
-    rm_f "#{ISO_DIR}/build.log"
-    rm_f FileList["#{ISO_DIR}/*.iso"]
-    rm_f FileList["#{ISO_DIR}/build/*.iso"]
+
+    if Dir.exist?("#{ISO_DIR}/build")
+      iso_dir = File.expand_path(ISO_DIR)
+      sh <<~CMD
+        docker run --rm --privileged \
+          --name codaiso-cleaner \
+          -v #{iso_dir}:/repo \
+          debian:testing \
+          bash -c "rm -rf /repo/build"
+      CMD
+    end
   end
 
   desc 'Clean and rebuild the ISO'
@@ -132,8 +129,9 @@ end
 
 # Version tasks
 VERSION_FILE = 'VERSION'
-BRANDING_FILE = 'config/includes.chroot/etc/calamares/branding/hobby/branding.desc'
+BRANDING_FILE = 'config/includes.chroot/etc/calamares/branding/coda/branding.desc'
 OS_RELEASE_FILES = [
+  'config/includes.chroot/etc/os-release',
   'config/includes.chroot/usr/lib/os-release'
 ].freeze
 
@@ -148,8 +146,8 @@ def write_version(version)
     branding = File.read(BRANDING_FILE)
     branding.gsub!(/^\s*version:\s*.+$/, "    version:             #{version}")
     branding.gsub!(/^\s*shortVersion:\s*.+$/, "    shortVersion:        #{version}")
-    branding.gsub!(/^\s*versionedName:\s*.+$/, "    versionedName:       Hobby Linux #{version}")
-    branding.gsub!(/^\s*shortVersionedName:\s*.+$/, "    shortVersionedName:  Hobby #{version}")
+    branding.gsub!(/^\s*versionedName:\s*.+$/, "    versionedName:       Coda Linux #{version}")
+    branding.gsub!(/^\s*shortVersionedName:\s*.+$/, "    shortVersionedName:  Coda #{version}")
     File.write(BRANDING_FILE, branding)
   end
 
@@ -157,7 +155,7 @@ def write_version(version)
     next unless File.exist?(file)
 
     content = File.read(file)
-    content.gsub!(/^PRETTY_NAME="Hobby Linux .+"$/, %(PRETTY_NAME="Hobby Linux #{version}"))
+    content.gsub!(/^PRETTY_NAME="Coda Linux .+"$/, %(PRETTY_NAME="Coda Linux #{version}"))
     content.gsub!(/^VERSION_ID=".+"$/, %(VERSION_ID="#{version}"))
     content.gsub!(/^VERSION=".+"$/, %(VERSION="#{version}"))
     File.write(file, content)
@@ -166,7 +164,7 @@ end
 
 desc 'Display current version'
 task :version do
-  puts "Hobby Linux v#{current_version}"
+  puts "coda v#{current_version}"
 end
 
 desc 'Increment the patch version (0.1.0 -> 0.1.1)'
@@ -204,7 +202,7 @@ task :lint do
   sh 'ruby spec/lint.rb'
 end
 
-# Specz
+# Specs
 namespace :spec do
   desc 'Run unit specs'
   task :unit do
@@ -229,3 +227,16 @@ end
 
 desc 'Alias for rake spec'
 task test: :spec
+
+# Local living integration testbed tasks
+namespace :local do
+  desc 'Show diff between repo configs and running local system'
+  task :diff do
+    sh './bin/local-sync.fish diff'
+  end
+
+  desc 'Sync system configs from repository to local system (requires sudo)'
+  task :sync do
+    sh './bin/local-sync.fish sync'
+  end
+end

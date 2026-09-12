@@ -1,5 +1,5 @@
 ---
-componentName:  hobby
+componentName:  coda
 
 # windowExpanding can be normal, fullscreen, or noexpand
 windowExpanding: normal
@@ -11,18 +11,18 @@ sidebar: widget
 navigation: widget
 
 strings:
-    productName:         Hobby Linux
-    shortProductName:    Hobby
-    version:             0.7.1
-    shortVersion:        0.7.1
-    versionedName:       Hobby Linux 0.7.1
-    shortVersionedName:  Hobby 0.7.1
-    bootloaderEntryName: Hobby
-    productUrl:          https://github.com/Egeeio/hobbylinux
-    supportUrl:          https://github.com/Egeeio/hobbylinux
-    knownIssuesUrl:      https://github.com/Egeeio/hobbylinux
-    releaseNotesUrl:     https://github.com/Egeeio/hobbylinux
-    donateUrl:           https://github.com/Egeeio/hobbylinux
+    productName:         Coda Linux
+    shortProductName:    Coda
+    version:             0.1.0
+    shortVersion:        0.1.0
+    versionedName:       Coda Linux 0.1.0
+    shortVersionedName:  Coda 0.1.0
+    bootloaderEntryName: Coda
+    productUrl:          https://github.com/egeexyz/coda
+    supportUrl:          https://github.com/egeexyz/coda
+    knownIssuesUrl:      https://github.com/egeexyz/coda/issues
+    releaseNotesUrl:     https://github.com/egeexyz/coda/releases
+    donateUrl:           https://github.com/egeexyz/coda
 
 images:
     productLogo:         "eglabs.webp"

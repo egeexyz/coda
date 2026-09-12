@@ -11,5 +11,6 @@ RSpec.describe 'APT Package Pinning & Preferences' do
 
     expect(content).to match(/Package:\s*rsyslog\nPin:\s*release\s*\*\nPin-Priority:\s*-1/)
     expect(content).to match(/Package:\s*rtkit\nPin:\s*release\s*\*\nPin-Priority:\s*-1/)
+    expect(content).not_to match(/Package:\s*sudo\n/)
   end
 end

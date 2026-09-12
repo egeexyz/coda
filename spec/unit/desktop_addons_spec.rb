@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe 'Desktop Addons & Wallpaper Configuration' do
-  let(:desktop_list) { 'config/package-lists/installed.list.chroot' }
+  let(:desktop_list) { 'config/package-lists/desktop.list.chroot' }
 
   it 'includes plasma-wallpapers-addons for Picture of the Day support' do
     pkgs = File.read(desktop_list)
@@ -16,6 +16,11 @@ RSpec.describe 'Desktop Addons & Wallpaper Configuration' do
     expect(File.exist?('config/includes.chroot/usr/share/wallpapers/Next/contents/images/5120x2880.png')).to be true
     expect(File.exist?('config/includes.chroot/usr/share/wallpapers/Next/contents/images_dark/background-dark.webp')).to be true
     expect(File.exist?('config/includes.chroot/usr/share/wallpapers/Next/contents/images_dark/5120x2880.png')).to be true
+
+    sddm_conf = File.read('config/includes.chroot/usr/share/sddm/themes/breeze/theme.conf.user')
+    expect(sddm_conf).to match(/background=\/usr\/share\/wallpapers\/Next\/contents\/images_dark\/5120x2880\.png/)
+
+    expect(Dir.glob('config/**/*.js')).to be_empty
   end
 
   it 'provisions opaque panel defaults in plasmashellrc' do
@@ -47,6 +52,17 @@ RSpec.describe 'Desktop Addons & Wallpaper Configuration' do
       expect(File.exist?(path)).to be true
       content = File.read(path)
       expect(content).to match(/baloosearchEnabled=false/)
+    end
+  end
+
+  it 'enables LockOnResume in kscreenlockerrc' do
+    [
+      'config/includes.chroot/etc/xdg/kscreenlockerrc',
+      'config/includes.chroot/etc/skel/.config/kscreenlockerrc'
+    ].each do |path|
+      expect(File.exist?(path)).to be true
+      content = File.read(path)
+      expect(content).to match(/LockOnResume=true/)
     end
   end
 

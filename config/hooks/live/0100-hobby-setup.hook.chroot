@@ -45,21 +45,8 @@ if dpkg -l plasma-welcome &>/dev/null
     apt-get purge -y plasma-welcome
 end
 
-log_debug "Purging nouveau driver from chroot kernel modules..."
-find /usr/lib/modules/ -name "*nouveau*" -delete 2>/dev/null || true
-for kver in (ls /usr/lib/modules 2>/dev/null)
-    if test -d /usr/lib/modules/$kver
-        depmod -a $kver
-    end
-end
-
 log_debug "Masking background APT update timers in live session..."
-systemctl mask \
-    apt-daily.service \
-    apt-daily.timer \
-    apt-daily-upgrade.service \
-    apt-daily-upgrade.timer \
-    unattended-upgrades.service
+hobby_mask_live_services
 
 log_debug "Configuring sudo-rs as default sudo implementation..."
 if test -f /usr/bin/sudo-rs
@@ -75,8 +62,8 @@ mkdir -p /etc/sudoers.d
 chmod 750 /etc/sudoers.d
 
 log_debug "Configuring passwordless sudo for live user..."
-echo 'hobby ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/hobby
-chmod 440 /etc/sudoers.d/hobby
+echo 'coda ALL=(ALL:ALL) NOPASSWD: ALL' > /etc/sudoers.d/coda
+chmod 440 /etc/sudoers.d/coda
 
 log_debug "Updating APT sources list to modern deb822 format..."
 apt modernize-sources -y

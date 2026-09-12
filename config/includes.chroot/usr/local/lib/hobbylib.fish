@@ -1,4 +1,20 @@
 # /usr/local/lib/hobbylib.fish
+# Hobby Linux Fish Helper Library
+
+set -g LIVE_MASKED_SERVICES \
+    apt-daily.service \
+    apt-daily.timer \
+    apt-daily-upgrade.service \
+    apt-daily-upgrade.timer \
+    unattended-upgrades.service
+
+function hobby_mask_live_services
+    systemctl mask $LIVE_MASKED_SERVICES
+end
+
+function hobby_unmask_live_services
+    systemctl unmask $LIVE_MASKED_SERVICES
+end
 
 function hobby_log -a level
     set -l msg $argv[2..-1]

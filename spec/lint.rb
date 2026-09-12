@@ -6,11 +6,11 @@ require 'yaml'
   yaml_files.each do |file|
     begin
       YAML.safe_load_file(file, aliases: true)
-      puts "  #{file}"
+      puts "  👍 #{file}"
     rescue Psych::SyntaxError => e
-      errors << "  YAML syntax error in #{file}:\n#{e.message}"
+      errors << "  👎 YAML syntax error in #{file}:\n#{e.message}"
     rescue => e
-      errors << "  Error reading #{file}:\n#{e.message}"
+      errors << "  👎 Error reading #{file}:\n#{e.message}"
     end
   end
 
@@ -29,9 +29,9 @@ require 'yaml'
     puts "\nRunning ShellCheck on shell scripts..."
     sh_files.each do |file|
       if system('shellcheck', file)
-        puts "  #{file}"
+        puts "  👍 #{file}"
       else
-        errors << "  ShellCheck failed for #{file}"
+        errors << "  👎 ShellCheck failed for #{file}"
       end
     end
   end
@@ -44,9 +44,9 @@ require 'yaml'
     puts "\nChecking Fish syntax..."
     fish_files.each do |file|
       if system('fish', '-n', file)
-        puts "  #{file}"
+        puts "  👍 #{file}"
       else
-        errors << "  Fish syntax error in #{file}"
+        errors << "  👎 Fish syntax error in #{file}"
       end
     end
   end
@@ -55,7 +55,7 @@ require 'yaml'
   if errors.any?
     puts "\n"
     errors.each { |err| puts err }
-    abort "\nLinting failed with #{errors.size} error(s)"
+    abort "\n👎 Linting failed with #{errors.size} error(s)"
   else
-    puts "\nAll files passed linting."
+    puts "\n👍 All files passed linting."
   end

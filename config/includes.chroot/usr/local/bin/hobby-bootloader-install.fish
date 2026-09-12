@@ -1,6 +1,7 @@
 #!/usr/bin/fish
 set -g fish_trace 1
 
+# Source shared helper library
 source /usr/local/lib/hobbylib.fish
 
 function install_uefi
@@ -18,7 +19,7 @@ function main
     log_info "Starting Hobby Linux Bootloader Installation..."
 
     if not test -d /sys/firmware/efi
-        log_error "UEFI firmware not detected. Hobby Linux requires UEFI!"
+        log_error "UEFI firmware not detected. Hobby Linux requires UEFI."
         exit 1
     end
 
@@ -43,7 +44,7 @@ function main
         grub-mkconfig -o /boot/grub/grub.cfg
     end
 
-    log_info "Bootloader installation complete!"
+    log_info "Bootloader installation complete."
 end
 
 main

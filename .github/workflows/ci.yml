@@ -1,5 +1,5 @@
 name: CI
-
+ 
 on:
   push:
     branches: [ main ]
@@ -26,11 +26,10 @@ jobs:
           sudo apt-get install -y shellcheck fish
 
       - name: Install Ruby dependencies
-        run: |
-          gem install rake rspec psych
+        run: bundle install
 
       - name: Run Linting
-        run: rake lint
+        run: bundle exec rake lint
 
       - name: Run Specs
-        run: rake spec
+        run: bundle exec rake spec

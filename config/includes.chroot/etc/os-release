@@ -1,1 +1,11 @@
-../usr/lib/os-release
+PRETTY_NAME="Coda Linux 0.1.0"
+NAME="Coda Linux"
+VERSION_ID="0.1.0"
+VERSION="0.1.0"
+VERSION_CODENAME="trixie"
+ID=coda
+ID_LIKE=debian
+HOME_URL="https://github.com/egeexyz/coda"
+SUPPORT_URL="https://github.com/egeexyz/coda"
+BUG_REPORT_URL="https://github.com/egeexyz/coda/issues"
+

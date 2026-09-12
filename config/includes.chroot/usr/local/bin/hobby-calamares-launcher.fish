@@ -1,11 +1,13 @@
 #!/usr/bin/fish
 set -g fish_trace 1
 
+# Source shared helper library
 source /usr/local/lib/hobbylib.fish
 
 log_info "Settling udev hardware probing..."
 udevadm settle --timeout=10
 
+# Wait for apt/dpkg locks to clear if any background package process is running
 log_info "Verifying package manager locks..."
 while fuser /var/lib/dpkg/lock-frontend /var/lib/dpkg/lock /var/lib/apt/lists/lock
     sleep 0.5

@@ -1,0 +1,2 @@
+# Set Kyber I/O scheduler for fast multi-queue NVMe storage
+ACTION=="add|change", KERNEL=="nvme[0-9]*n[0-9]*", ATTR{queue/scheduler}="kyber"

@@ -14,12 +14,11 @@ lb config noauto \
   --bootloaders "grub-efi" \
   --binary-images iso-hybrid \
   --debian-installer none \
-  --iso-application "Hobby Linux Live" \
-  --iso-publisher "Hobby Linux <https://github.com/Egeeio/hobbylinux>" \
-  --iso-volume "hobbylinux" \
+  --iso-application "Coda Linux Live" \
+  --iso-publisher "Coda Linux <https://github.com/egeexyz/coda>" \
+  --iso-volume "coda" \
   --memtest none \
   --apt-indices false \
   --firmware-chroot false \
-  --bootappend-live "boot=live components username=hobby user-fullname=Hobby hostname=hobbylinux autologin module_blacklist=nouveau modprobe.blacklist=nouveau" \
-  --bootappend-live-failsafe "boot=live components username=hobby user-fullname=Hobby hostname=hobbylinux autologin module_blacklist=nouveau modprobe.blacklist=nouveau nomodeset" \
+  --bootappend-live "boot=live components username=coda user-fullname=Coda hostname=coda autologin" \
   "${@}"

@@ -13,8 +13,8 @@ RSpec.describe 'Calamares Bootloader Configuration' do
     expect(grub_default).to match(/GRUB_GFXMODE="1920x1080,auto"/)
     expect(grub_default).to match(%r{GRUB_THEME="/boot/grub/themes/breeze/theme.txt"})
 
-    installed_pkgs = File.read('config/package-lists/installed.list.chroot')
-    expect(installed_pkgs).to match(/^grub-theme-breeze$/)
+    desktop_pkgs = File.read('config/package-lists/desktop.list.chroot')
+    expect(desktop_pkgs).to match(/^grub-theme-breeze$/)
   end
 
   it 'configures Plymouth daemon with Spinner theme, 2x scaling, and package presence' do
@@ -24,7 +24,7 @@ RSpec.describe 'Calamares Bootloader Configuration' do
     expect(content).to match(/Theme=spinner/)
     expect(content).to match(/DeviceScale=2/)
 
-    installed_pkgs = File.read('config/package-lists/installed.list.chroot')
-    expect(installed_pkgs).to match(/^plymouth-themes$/)
+    desktop_pkgs = File.read('config/package-lists/desktop.list.chroot')
+    expect(desktop_pkgs).to match(/^plymouth-themes$/)
   end
 end
