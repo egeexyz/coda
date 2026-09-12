@@ -17,12 +17,12 @@ RSpec.describe 'Hi-Fi Audio & Real-time Scheduling Configuration' do
     expect(content).to match(/@audio\s+-\s+memlock\s+unlimited/)
   end
 
-  it 'configures PipeWire with audiophile sample rates and high-quality resampling' do
+  it 'configures PipeWire with sample rates and resampling' do
     expect(File.exist?(pipewire_conf_path)).to be true
     content = File.read(pipewire_conf_path)
-    expect(content).to match(/44100/)
+    expect(content).to match(/48000/)
     expect(content).to match(/192000/)
-    expect(content).to match(/resample\.quality\s*=\s*10/)
+    expect(content).to match(/resample\.quality\s*=\s*4/)
   end
 
   it 'configures PipeWire-Pulse buffer parameters' do

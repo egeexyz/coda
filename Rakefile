@@ -216,13 +216,13 @@ namespace :spec do
 
   desc 'Run e2e specs'
   task :e2e do
-    sh 'rspec -I spec spec/e2e'
+    sh 'bundle exec rspec -I spec spec/e2e'
   end
 end
 
 desc 'Run all specs'
 task :spec do
-  sh 'rspec -I spec spec'
+  sh 'bundle exec rspec -I spec spec'
 end
 
 desc 'Alias for rake spec'
