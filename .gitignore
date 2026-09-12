@@ -21,6 +21,7 @@ config/hooks/live/00*.chroot
 
 # Build workspaces, outputs, and QEMU VMs
 *bundle/
+vendor/
 build/
 vm/
 
